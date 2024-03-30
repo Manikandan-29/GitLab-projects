@@ -1,0 +1,25 @@
+stages :
+  - build_stage
+  - deploy_stage
+ 
+build:
+  stage: build_stage
+  script:
+   - docker --version
+   - docker build -t my-python-app .
+   
+  tags:
+   - server
+   - ec2
+
+deploy :
+ stage: deploy_stage
+ script:
+  - docker rm pythonapp -f
+  - docker login -u $DOCKERUSERNAME -p $TOKEN
+  - docker tag my-python-app $DOCKERUSERNAME/my-python-app
+  - docker push $DOCKERUSERNAME/my-python-app
+  - docker run -d --name pythonapp -p 80:8000 my-python-app
+ tags:
+  - server
+  - ec2
