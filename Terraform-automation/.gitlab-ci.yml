@@ -47,6 +47,6 @@ destroy:
     stage: destroy
     
     script:
-      -terraform destroy
+      - terraform destroy -auto-approve
         
     when: manual  
